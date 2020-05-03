@@ -60,6 +60,7 @@ services:
   epc:
     depends_on:
       - mongodb
+      - mongodbloader
     image: docker-open5gs_epc
     container_name: "open5gs_epc"
     cap_add:
@@ -76,7 +77,7 @@ services:
        physical:
          ipv4_address: 172.30.2.21
     hostname: open5gs-run
-    command: /bin/bash -c "/etc/open5gs/setup.sh; /bin/open5gs-pcrfd -D; /bin/open5gs-pgwd -D; /bin/open5gs-sgwd -D; /bin/open5gs-hssd -D; /bin/open5gs-mmed"
+    command: /bin/bash -c "/etc/open5gs/setup.sh; sleep 15; /bin/open5gs-hssd -D; sleep 5; /bin/open5gs-sgwd -D; /bin/open5gs-pgwd -D; /bin/open5gs-mmed -D; /bin/open5gs-pcrfd"
     
 volumes:
   mongodb_data:
