@@ -8,7 +8,8 @@ RUN apt-get --no-install-recommends -qqy install python3-pip python3-setuptools 
 RUN pip3 install --user meson
 RUN git clone --recursive https://github.com/open5gs/open5gs
 # 1.2.2 version
-RUN cd open5gs && git checkout c7856bf3b20f9e0a3023730fd3156563bc8923f7 && ~/.local/bin/meson build --prefix=/ && ninja -C build && cd build && ninja install
+RUN git clone -b v1.2.2 --recursive https://github.com/open5gs/open5gs
+RUN cd open5gs && ~/.local/bin/meson build --prefix=/ && ninja -C build && cd build && ninja install
 RUN apt-get -y install curl gnupg
 
 ENV TZ=Europe/Madrid
