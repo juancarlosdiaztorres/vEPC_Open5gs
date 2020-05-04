@@ -1,10 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 RUN apt-get -yq dist-upgrade
-RUN apt-get --no-install-recommends -qqy install python3-pip python3-setuptools ninja-build build-essential flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev iproute2 iptables
+RUN apt-get --no-install-recommends -qqy install python3-pip python3-setuptools ninja-build build-essential flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev iproute2 iputils-ping iptables
 RUN pip3 install --user meson
 RUN git clone --recursive https://github.com/open5gs/open5gs
 # 1.2.2 version
