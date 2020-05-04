@@ -72,12 +72,10 @@ services:
     volumes:
       - ./config-allinone-1ip:/etc/open5gs
     networks:
-       eth0:
-         mgmt:
-           ipv4_address: 192.168.50.8
-       eth1: 
-         physical:
-           ipv4_address: 172.30.2.21
+      mgmt:
+        ipv4_address: 192.168.50.8
+      physical:
+        ipv4_address: 172.30.2.21
     hostname: open5gs-run
     command: /bin/bash -c "/etc/open5gs/setup.sh; /bin/open5gs-pcrfd -D; /bin/open5gs-pgwd -D; /bin/open5gs-sgwd -D; /bin/open5gs-hssd -D; /bin/open5gs-mmed"
     
