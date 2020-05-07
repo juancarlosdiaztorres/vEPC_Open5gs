@@ -21,7 +21,7 @@ services:
         ipv4_address: 192.168.50.5
   
   webui:
-    image: docker-open5gs_webui
+    image: vepc_open5gs_webui
     depends_on:
       - mongodb
     environment:
@@ -60,7 +60,7 @@ services:
   epc:
     depends_on:
       - mongodb
-    image: docker-open5gs_epc
+    image: vepc_open5gs_epc
     container_name: "open5gs_epc"
     cap_add:
       - NET_ADMIN
