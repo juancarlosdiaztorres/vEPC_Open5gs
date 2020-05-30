@@ -7,7 +7,7 @@ fi
 ip addr del 45.45.0.1/16 dev ogstun 2> /dev/null
 ip addr add 45.45.0.1/16 dev ogstun
 
-# careful here customize according to your config here assuming 192.168.50.x is my net with dns/int access
+# Configure following net config inside. Adding route for mgmt network and deleting the macvlan one.
 ip r del default via 172.30.2.1
 ip r add default via 192.168.50.1
 
