@@ -3,8 +3,8 @@ version: '3'
 networks:
   physical:
     external: true
-  db:
-   ipam:
+  private:
+    ipam:
      driver: default 
      config:
       - subnet: 192.168.50.0/24
@@ -17,11 +17,11 @@ services:
       - mongodb_data:/data/db
     hostname: mongodb
     networks:
-      db:
+      private:
         ipv4_address: 192.168.50.5
   
   webui:
-    image: vepc_open5gs_webui
+    build: ./webui
     depends_on:
       - mongodb
     environment:
@@ -32,12 +32,12 @@ services:
     ports:
       - "3100:3000"
     volumes:
-        - "./config-allinone-1ip:/etc/open5gs"
+        - "./config:/etc/open5gs"
     entrypoint:
       - "/bin/sh"
       - "/etc/open5gs/webui.sh"
     networks:
-      db:
+      private:
         ipv4_address: 192.168.50.6
   
   mongodbloader:
@@ -49,19 +49,20 @@ services:
     container_name: "open5gs_dbloader"
     volumes:
       - "./provisioning/db/run_db.sh:/tmp/run.sh"
-      - "./provisioning/db/imsi1.json:/tmp/imsi1.json"
+      - "./provisioning/db/imsi.json:/tmp/imsi.json"
     entrypoint:
       - /bin/sh
       - /tmp/run.sh
     networks:
-      db:
+      private:
         ipv4_address: 192.168.50.7
 
   epc:
     depends_on:
       - mongodb
-    image: vepc_open5gs_epc
     container_name: "open5gs_epc"
+    build:
+      context: ./
     cap_add:
       - NET_ADMIN
     devices:
@@ -69,14 +70,14 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     volumes:
-      - ./config-allinone-1ip:/etc/open5gs
+      - ./config:/etc/open5gs
     networks:
-       db: 
+       private:
          ipv4_address: 192.168.50.8
        physical:
          ipv4_address: 172.30.2.21
     hostname: open5gs-run
-    command: /bin/bash -c "/etc/open5gs/setup.sh; sleep 15; /bin/open5gs-hssd -D; /bin/open5gs-sgwd -D; /bin/open5gs-pgwd -D; /bin/open5gs-mmed -D; /bin/open5gs-pcrfd"
+    command: /bin/bash -c "/etc/open5gs/setup.sh; sleep 15 ; /bin/open5gs-pcrfd -D; /bin/open5gs-pgwd -D; /bin/open5gs-sgwd -D; /bin/open5gs-hssd -D; /bin/open5gs-mmed"
     
 volumes:
   mongodb_data:
